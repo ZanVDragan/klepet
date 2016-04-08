@@ -1,10 +1,16 @@
+/*
+	global $,
+	global Klepet,
+	global io
+*/
+
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-    return $('<div style="font-weight: bold"></div>').html(sporocilo);
+    return $("<div class = \"bold-text\"></div>").html(sporocilo);
   } else {
-    return $('<div style="font-weight: bold;"></div>').text(sporocilo);
+    return $("<div class = \"bold-text\"></div>").text(sporocilo);
   }
 }
 
@@ -99,6 +105,11 @@ $(document).ready(function() {
     for (var i=0; i < uporabniki.length; i++) {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
+    
+    $("#seznam-uporabnikov div").click(function() {
+      	$("#poslji-sporocilo").focus();
+    	$("#poslji-sporocilo").val("/zasebno \"" + $(this).text() + "\" ");
+  	});
   });
 
   setInterval(function() {
@@ -123,7 +134,7 @@ function dodajSmeske(vhodnoBesedilo) {
     "(y)": "like.png",
     ":*": "kiss.png",
     ":(": "sad.png"
-  }
+  };
   for (var smesko in preslikovalnaTabela) {
     vhodnoBesedilo = vhodnoBesedilo.replace(smesko,
       "<img src='http://sandbox.lavbic.net/teaching/OIS/gradivo/" +
