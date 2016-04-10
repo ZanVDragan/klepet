@@ -4,18 +4,41 @@
 	global io
 */
 
+/**
+ * @param message to check for image/youtube links.
+ * @return content to be added accordingly.
+ */
+ function checkLink(message) {
+ 	// Image Regex
+ 	var imgReg = /^https?:\/\/.{1,}\.(jpg|png|gif)$/i;
+ 	
+ 	// Array of message content.
+ 	var msgSplit = message.split(" ");
+ 	var addition = "";
+ 	// Iterate over the message and check for regex match.
+ 	for (var i = 0; i < msgSplit.length; i++) {
+ 		if (imgReg.test(msgSplit[i])) {
+ 			addition += " <img class = \"margin-left-20\" src = \""+ msgSplit[i] +"\" width = \"200px\" alt = \"" + msgSplit[i] + "\">";
+ 		}
+ 	}
+ 	
+ 	return addition;
+ }
+ 
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
+  var addition = addition = checkLink(sporocilo);
+  if (jeSmesko || addition.length) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-    return $("<div class = \"bold-text\"></div>").html(sporocilo);
+    return $("<div class = \"bold-text\"></div>").html(sporocilo+addition);
   } else {
     return $("<div class = \"bold-text\"></div>").text(sporocilo);
   }
 }
 
 function divElementHtmlTekst(sporocilo) {
-  return $('<div></div>').html('<i>' + sporocilo + '</i>');
+	sporocilo += checkLink(sporocilo);
+	return $('<div></div>').html('<i>' + sporocilo + '</i>');
 }
 
 function procesirajVnosUporabnika(klepetApp, socket) {

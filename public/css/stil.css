@@ -11,6 +11,10 @@ a {
   font-weight: bold;
 }
 
+.margin-left-20 {
+  margin-left: 20px;
+}
+
 #vsebina {
   width: 100%;
   margin-left: auto;
