@@ -11,6 +11,8 @@
  function checkLink(message) {
  	// Image Regex
  	var imgReg = /^https?:\/\/.{1,}\.(jpg|png|gif)$/i;
+ 	// Youtube Regex
+ 	var videoReg = /^https?:\/\/www.youtube.com\/watch\?v=.{1,}$/i;
  	
  	// Array of message content.
  	var msgSplit = message.split(" ");
@@ -19,6 +21,10 @@
  	for (var i = 0; i < msgSplit.length; i++) {
  		if (imgReg.test(msgSplit[i])) {
  			addition += " <img class = \"margin-left-20\" src = \""+ msgSplit[i] +"\" width = \"200px\" alt = \"" + msgSplit[i] + "\">";
+ 		} else if (videoReg.test(msgSplit[i])) {
+ 			// Get link for embeded player.
+ 			var vidSrc = "https://www.youtube.com/embed/" + msgSplit[i].split("?v=")[1];
+ 			addition += " <iframe class = \"margin-left-20\" src = \"" + vidSrc + "\" width = \"200px\" height = \"150px\" allowfullscreen><\/iframe>";
  		}
  	}
  	
@@ -29,6 +35,7 @@ function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   var addition = addition = checkLink(sporocilo);
   if (jeSmesko || addition.length) {
+  	console.log(addition);
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $("<div class = \"bold-text\"></div>").html(sporocilo+addition);
   } else {
