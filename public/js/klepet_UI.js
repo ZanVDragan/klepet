@@ -35,7 +35,6 @@ function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   var addition = addition = checkLink(sporocilo);
   if (jeSmesko || addition.length) {
-  	console.log(addition);
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $("<div class = \"bold-text\"></div>").html(sporocilo+addition);
   } else {
@@ -140,6 +139,19 @@ $(document).ready(function() {
       	$("#poslji-sporocilo").focus();
     	$("#poslji-sporocilo").val("/zasebno \"" + $(this).text() + "\" ");
   	});
+  });
+  
+  // Check for poke event.
+  socket.on("dregljaj", function(vzdevek) {
+  	$("#sporocila").append(divElementEnostavniTekst(vzdevek.vzdevek + " vas je dregnil!"));
+  	$("#vsebina").jrumble();
+  	// Start shaking the screen.
+  	$("#vsebina").trigger("startRumble");
+  	// Wait for 1.5s.
+  	setTimeout(function() {
+  		// Stop shaking the screen.
+  		$("#vsebina").trigger("stopRumble");
+  	}, 1500);
   });
 
   setInterval(function() {
